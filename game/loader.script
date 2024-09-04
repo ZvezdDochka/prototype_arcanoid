@@ -1,0 +1,18 @@
+SCREEN_HIGH = sys.get_config_int("display.height") -- получаем высоту/ширину из настроек игры
+SCREEN_WIDTH = sys.get_config_int("display.width")
+
+function init(self)
+	msg.post("@render:", "use_fixed_fit_projection") -- задаем проекцию с сохранением пропорций (при изменении размеров окна)
+	msg.post(".", "acquire_input_focus") -- получаем информацию ввода с устройств
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("load_level") then
+		msg.post("#level_proxy", "load") -- загружаем уровень
+	end
+
+	if message_id == hash("proxy_loaded") then -- узнаем что новый уровень загружен
+		msg.post(sender, "init") -- инициализируем уровень
+		msg.post(sender, "enable") -- включаем все объекты, начинаем отрисовку спрайтов
+	end
+end

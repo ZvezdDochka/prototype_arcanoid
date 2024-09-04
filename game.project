@@ -1,12 +1,17 @@
 [bootstrap]
-main_collection = /main/main.collectionc
+main_collection = /game/game.collectionc
+render = /render/main.renderc
 
 [script]
 shared_state = 1
 
 [display]
-width = 960
-height = 640
+width = 1280
+height = 720
+high_dpi = 1
+display_profiles = /render/main.display_profilesc
+dynamic_orientation = 1
+update_frequency = 60
 
 [android]
 input_method = HiddenInputField
@@ -14,4 +19,16 @@ input_method = HiddenInputField
 [project]
 title = ArcanoidSineus
 developer = ZvezdDochka
+
+[sprite]
+max_count = 256
+
+[physics]
+max_collision_object_count = 256
+use_fixed_timestep = 1
+gravity_y = -1000.0
+scale = 0.02
+max_collisions = 256
+max_contacts = 512
+debug = 0
 
