@@ -1,0 +1,17 @@
+go.property("speed", 10)
+
+function init(self)
+	self.ground = 5
+	go.animate(go.get_id(), "position.y", go.PLAYBACK_ONCE_FORWARD, self.ground, go.EASING_OUTSINE, self.speed, 0)
+end
+
+function fixed_update(self, dt)
+	--
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("contact_point_response") and message.group == hash("platform") then
+		go.delete()
+		--msg.post("#collisionobject", "disable")
+	end
+end

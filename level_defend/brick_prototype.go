@@ -1,6 +1,6 @@
 components {
   id: "brick_prototype"
-  component: "/level/brick_prototype.script"
+  component: "/level_defend/brick_prototype.script"
   position {
     x: 0.0
     y: 0.0

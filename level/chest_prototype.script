@@ -1,0 +1,24 @@
+function init(self)
+	self.spawn_ready = true
+end
+
+function fixed_update(self, dt)
+	--
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("contact_point_response") and message.group == hash("ball") and self.spawn_ready then
+		local pos = go.get_position()
+		local loot_count = math.random(2, 3)
+		local loot_pos = {vmath.vector3(pos.x - 20, pos.y + 10, 0.6), vmath.vector3(pos.x, pos.y, 0.6), vmath.vector3(pos.x + 20, pos.y + 10, 0.6)}
+		for i = 1, loot_count do
+			local speed = math.random(3, 8)
+			factory.create("#factory", loot_pos[i], nil, {speed = speed}, 1)
+		end
+		print(loot_count)
+		self.spawn_ready = false
+		timer.delay(1, false, function()
+			self.spawn_ready = true
+		end)
+	end
+end

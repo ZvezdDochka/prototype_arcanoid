@@ -6,8 +6,8 @@ render = /render/main.renderc
 shared_state = 1
 
 [display]
-width = 1280
-height = 720
+width = 1920
+height = 1080
 high_dpi = 1
 display_profiles = /render/main.display_profilesc
 dynamic_orientation = 1
@@ -19,6 +19,7 @@ input_method = HiddenInputField
 [project]
 title = ArcanoidSineus
 developer = ZvezdDochka
+dependencies#0 = https://github.com/subsoap/defos/archive/refs/tags/v2.7.1.zip
 
 [sprite]
 max_count = 256
@@ -30,5 +31,5 @@ gravity_y = -1000.0
 scale = 0.02
 max_collisions = 256
 max_contacts = 512
-debug = 0
+debug = 1
 

@@ -1,0 +1,14 @@
+local function spawn_ball(self)
+	local pos = go.get_position()
+	self.ball = factory.create("#factory", pos, nil, {}, 1) -- создаем шарик из прототипа
+end
+
+function init(self)
+	--
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("generate_ball") then
+		spawn_ball(self) -- создаем шарик в полученной точке
+	end
+end

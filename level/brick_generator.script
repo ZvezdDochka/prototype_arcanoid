@@ -1,0 +1,20 @@
+local LOCATION = require("level.level_location")
+
+local function spawn_brick(self, level)
+	local current_location = LOCATION.BLOCK[level]
+	for i = 1, #current_location do
+		local pos = vmath.vector3(current_location[i][1], current_location[i][2], current_location[i][3])
+		factory.create("#factory", pos, nil, {}, 1)
+	end
+	msg.post("/platform", "bricks_are_ready")
+end
+
+function init(self)
+	--
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("generate_bricks") then
+		spawn_brick(self, message.level)
+	end
+end

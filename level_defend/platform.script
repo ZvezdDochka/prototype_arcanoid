@@ -16,12 +16,7 @@ end
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	--msg.post("#hands_collision", "disable")
-	
-	local pos = go.get_position()
-	local high = go.get("#sprite", "size.y")
-	msg.post("/ball_generator#ball_generator", "generate_ball", {x_pos = pos.x, y_pos = pos.y + high}) -- спавним шарик на платформе
-	msg.post("/brick_generator#brick_generator", "generate_bricks", {level = 1}) -- спавним шарик на платформе
-	msg.post("/chest_generator#chest_generator", "generate_chests", {level = 1}) -- спавним шарик на платформе
+	self.empty = true
 end
 
 function fixed_update(self, dt)
@@ -44,25 +39,16 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("Return_world_coordinate") then -- получаем позицию мыши в мировых координатах
 		limitX(self, message.x) -- ограничиваем по краям
 	end
-
-	if message_id == hash("ball_is_ready") then
-		self.fixed_ball = message.ball_id
-		msg.post(self.fixed_ball, "set_parent", { parent_id = go.get_id(), keep_world_transform = 1 }) -- когда шарик готов, приклеиваем его к платформе
-	end
 end
 
 function on_input(self, action_id, action)
 	msg.post("@render:", "Get_world_coordinate", {x = action.x, y = action.y, z = action.z}) -- отправлем запрос на получение мировых координат
 
 	if action_id == hash("touch") then
-		if self.fixed_ball and action.pressed then
-			local pos = go.get_position()
-			local dir = 1 if pos.x < SCREEN_WIDTH/2 then dir = -1 end -- если платформа ближе к правой стороне, то кидаем шарик вправо, если к левой, то влево
-
-			msg.post(self.fixed_ball, "set_parent", { keep_world_transform = 1 }) -- отвязываем шарик от платформы
-			msg.post(self.fixed_ball, "ball_released", {dir = dir}) -- посылаем в выбранном направлении
-			
-			self.fixed_ball = nil
+		if self.empty and action.pressed then
+			--msg.post("/ball_generator#ball_generator", "generate_ball") -- спавним шарик на платформе
+			msg.post("/spawn_ball_point#spawn_ball_point", "generate_ball") -- спавним шарик на платформе
+			--self.empty = false
 		end
 	end
 end
