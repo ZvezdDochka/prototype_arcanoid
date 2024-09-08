@@ -2,11 +2,13 @@ local LOCATION = require("level.level_location")
 
 local function spawn_brick(self, level)
 	local current_location = LOCATION.BLOCK[level]
-	for i = 1, #current_location do
+	local count = #current_location
+	for i = 1, count do
 		local pos = vmath.vector3(current_location[i][1], current_location[i][2], current_location[i][3])
 		factory.create("#factory", pos, nil, {}, 1)
 	end
-	msg.post("/platform", "bricks_are_ready")
+	--msg.post("/level#level", "bricks_are_ready", {count = count})
+	msg.post("/level_interface#level_interface", "bricks_are_ready", {count = count})
 end
 
 function init(self)

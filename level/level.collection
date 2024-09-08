@@ -1,7 +1,7 @@
 name: "level"
 scale_along_z: 0
 embedded_instances {
-  id: "interface"
+  id: "level_interface"
   data: "components {\n"
   "  id: \"level_interface\"\n"
   "  component: \"/level/level_interface.gui\"\n"
@@ -188,7 +188,7 @@ embedded_instances {
   "    count: 3\\n"
   "    id: \\\"\\\"\\n"
   "  }\\n"
-  "  data: 56.0\\n"
+  "  data: 64.77314\\n"
   "  data: 16.0\\n"
   "  data: 10.0\\n"
   "}\\n"
@@ -282,7 +282,7 @@ embedded_instances {
   ""
   position {
     x: 941.0
-    y: 240.0
+    y: 313.0
     z: 0.0
   }
   rotation {

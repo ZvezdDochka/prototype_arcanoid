@@ -1,5 +1,6 @@
 BALL_SPEED = 350
-PLATFORM_ADD_SPEED = 100
+BALL_ANGLE_SPEED = 450
+PLATFORM_ADD_SPEED = 1.2
 
 local function ballOutOfBorder(self)
 	if go.exists() and not self.out then
@@ -11,12 +12,13 @@ end
 
 function init(self)
 	msg.post("#collisionobject", "disable") -- на старте отключаем у шарика физику
-	self.speed = BALL_SPEED
+	self.speed_x = BALL_SPEED
+	self.speed_y = BALL_SPEED
 end
 
 function fixed_update(self, dt)
 	if self.direction then
-		local speed = vmath.vector3(self.speed * self.direction.x, self.speed * self.direction.y, 0)
+		local speed = vmath.vector3(self.speed_x * self.direction.x, self.speed_y * self.direction.y, 0)
 		local new_pos = go.get_position() + speed * dt -- вычисляем новую позицию шарика в зависимости от скорости, направления и временем отрисовки последнего кадра
 		go.set_position(new_pos) -- двигаем шарик
 		--print("SPEED", speed)
@@ -27,40 +29,70 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("contact_point_response") then -- обрабатываем столкновение шарика с поверхностями 
 		if message.group == hash("out") then -- при столкновении с нижней границей поля
 			ballOutOfBorder(self)
-		elseif message.group == hash("platform") or message.group == hash("top") or message.group == hash("left") or message.group == hash("right") then
+		elseif message.group == hash("platform") or message.group == hash("chest") or message.group == hash("top") or message.group == hash("left") or message.group == hash("right") then
 			if message.other_id ~= self.prev_id then -- если до этого шарик касался другого объекта
 				local normal = message.normal -- берем нормаль к поверхности
 				--print("NORMAl", normal)
 
 				if normal.x ~= 0 then
-					-- if normal.x > 0 then
-					-- 	self.direction.x = 1 -- отталкиваем шарик в противоположном направлении по x (упрощенный вариант)
-					-- else 
-					-- 	self.direction.x = -1
-					-- end
-					self.direction.x = math.abs(self.direction.x) * normal.x -- отталкиваем шарик в противоположном направлении по x
+					if normal.x > 0 then
+						self.direction.x = 1 -- отталкиваем шарик в противоположном направлении по x (упрощенный вариант)
+					else 
+						self.direction.x = -1
+					end
+					--self.direction.x = math.abs(self.direction.x) * normal.x -- отталкиваем шарик в противоположном направлении по x
 				end
 
 				if normal.y ~= 0 then
-					-- if normal.y > 0 then
-					-- 	self.direction.y = 1
-					-- else
-					-- 	self.direction.y = -1
-					-- end
-					self.direction.y = math.abs(self.direction.y) * normal.y -- отталкиваем шарик в противоположном направлении по y
+					if normal.y > 0 then
+						self.direction.y = 1
+					else
+						self.direction.y = -1
+					end
+					--self.direction.y = math.abs(self.direction.y) * normal.y -- отталкиваем шарик в противоположном направлении по y
 				end
 				
 				self.prev_id = message.other_id -- запоминаем объект, которого коснулся шарик
 			end
 
 			if message.group == hash("platform") then
-				local speed = go.get("/platform#platform", "speed")
-
-				if speed >= SCREEN_WIDTH/2 and speed <= SCREEN_WIDTH then self.speed = BALL_SPEED + PLATFORM_ADD_SPEED
-				elseif speed >= SCREEN_WIDTH then self.speed = BALL_SPEED + PLATFORM_ADD_SPEED * 2
-				elseif speed < SCREEN_WIDTH then self.speed = BALL_SPEED
+				local platform_speed = go.get("/platform#platform", "speed")
+				local platform_size_x = go.get("/platform#sprite", "size.x")
+				
+				local ball_pos = message.position.x
+				local platform_pos = message.other_position.x
+				local diff = math.abs(platform_pos - ball_pos)
+				
+				if diff >= platform_size_x/4 then -- делаем меньше угол полета и чуть ускоряем шарик по х
+					self.speed_x = BALL_ANGLE_SPEED
+				else
+					self.speed_x = BALL_SPEED
 				end
+
+				if platform_speed >= SCREEN_WIDTH/2 then
+					if self.speed_x < BALL_ANGLE_SPEED * PLATFORM_ADD_SPEED then
+						self.speed_x = self.speed_x * PLATFORM_ADD_SPEED
+						self.speed_y = self.speed_y * PLATFORM_ADD_SPEED
+					end
+					print("fast")
+				else
+					if self.speed_y >= BALL_SPEED * PLATFORM_ADD_SPEED then
+						if diff >= platform_size_x/4 then
+							self.speed_x = BALL_ANGLE_SPEED
+						else
+							self.speed_x = BALL_SPEED
+						end
+						self.speed_y = BALL_SPEED
+					end
+				end
+			elseif message.group == hash("chest") then -- немного меняем угол при отскоке об статичные поверхности, чтобы мячик не зацикливался
+				local rx = math.random(-70, 70)
+				local ry = math.random(-50, 50)
+				self.speed_x = self.speed_x + rx
+				self.speed_y = self.speed_y + ry
 			end
+			--print(self.speed_x)
+			--print(self.speed_y)
 		end
 	end
 

@@ -10,7 +10,6 @@ local function changeProgress(self, count)
 	else
 		msg.post("game:/interface#main_menu", "show_main_menu") -- активируем меню
 		msg.post("game:/loader#loader", "game_over", {level = "classic"})
-		print("GAMEOVEEEEEER")
 	end
 end
 

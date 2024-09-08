@@ -6,7 +6,7 @@ local function spawn_chest(self, level)
 		local pos = vmath.vector3(current_location[i][1], current_location[i][2], current_location[i][3])
 		factory.create("#factory", pos, nil, {}, 1)
 	end
-	msg.post("/platform", "chests_are_ready")
+	--msg.post("/level#level", "chests_are_ready")
 end
 
 function init(self)

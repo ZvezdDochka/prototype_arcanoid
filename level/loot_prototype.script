@@ -11,7 +11,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("contact_point_response") and message.group == hash("platform") then
+		msg.post("/level_interface#level_interface", "loot_increase", {count = 1})
 		go.delete()
-		--msg.post("#collisionobject", "disable")
 	end
 end

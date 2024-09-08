@@ -20,19 +20,13 @@ end
 
 function fixed_update(self, dt)
 	if self.x_mouse_pos then
-		self.pos = go.get_world_position()
+		local pos = go.get_world_position()
+		local new_pos = vmath.vector3(self.x_mouse_pos, pos.y, pos.z)
+		local diff = math.abs(new_pos.x - pos.x)
+		self.speed = diff/dt
 		
-		if self.last_pos then
-			local sp = math.abs(self.last_pos.x - self.pos.x)
-			if sp ~= self.speed then
-				self.speed = (math.abs(self.last_pos.x - self.pos.x))/dt
-			end
-		end
-		local pos = vmath.vector3(self.x_mouse_pos, self.pos.y, self.pos.z)
-		go.set_position(pos) -- двигаем платформу при движении мыши
-		self.last_pos = pos
-
-		msg.post("#platform_interface", "change_position", {pos = pos})
+		go.set_position(new_pos) -- двигаем платформу при движении мыши
+		msg.post("#platform_interface", "change_position", {pos = new_pos})
 	end
 end
 

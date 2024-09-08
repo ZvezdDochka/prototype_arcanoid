@@ -1,17 +1,49 @@
+local coins = 0
+local loot = 0
+local bricks = 0
+local bricks_on_level = 0
+
 function init(self)
 	msg.post(".", "acquire_input_focus") -- получаем информацию ввода с устройств
 	self.close_node = gui.get_node("close_btn")
+	self.coins_count_node = gui.get_node("coins_count")
+	self.loot_count_node = gui.get_node("loot_count")
+
+	gui.set_text(self.coins_count_node, coins)
+	gui.set_text(self.loot_count_node, loot)
 end
 
 function on_message(self, message_id, message, sender)
+	if message_id == hash("start_level") then
+		coins = message.coins
+		loot = message.loot
+	end
 	
+	if message_id == hash("bricks_are_ready") then
+		bricks_on_level = message.count
+	end
+	
+	if message_id == hash("coins_increase") then
+		coins = coins + message.count
+		gui.set_text(self.coins_count_node, coins)
+
+		bricks = bricks + 1
+		if bricks >= 2 then --bricks_on_level
+			msg.post("game:/loader#loader", "win_level", {level_type = "classic", coins = coins, loot = loot})
+		end
+	end
+	
+	if message_id == hash("loot_increase") then
+		loot = loot + message.count
+		gui.set_text(self.loot_count_node, loot)
+	end
 end
 
 function on_input(self, action_id, action)
 	if action_id == hash("touch") and action.pressed then
 		if (gui.pick_node(self.close_node, action.x, action.y)) then
 			msg.post("game:/interface#main_menu", "show_main_menu") -- активируем меню
-			msg.post("game:/loader#loader", "game_over", {level = "classic"})
+			msg.post("game:/loader#loader", "game_over", {level_type = "classic"})
 		end
 	end
 end
