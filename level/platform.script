@@ -16,12 +16,6 @@ end
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	--msg.post("#hands_collision", "disable")
-	
-	local pos = go.get_position()
-	local high = go.get("#sprite", "size.y")
-	msg.post("/ball_generator#ball_generator", "generate_ball", {x_pos = pos.x, y_pos = pos.y + high}) -- спавним шарик на платформе
-	msg.post("/brick_generator#brick_generator", "generate_bricks", {level = 1}) -- спавним шарик на платформе
-	msg.post("/chest_generator#chest_generator", "generate_chests", {level = 1}) -- спавним шарик на платформе
 end
 
 function fixed_update(self, dt)
@@ -34,9 +28,11 @@ function fixed_update(self, dt)
 				self.speed = (math.abs(self.last_pos.x - self.pos.x))/dt
 			end
 		end
-		
-		go.set_position(vmath.vector3(self.x_mouse_pos, self.pos.y, self.pos.z)) -- двигаем платформу при движении мыши
-		self.last_pos = self.pos
+		local pos = vmath.vector3(self.x_mouse_pos, self.pos.y, self.pos.z)
+		go.set_position(pos) -- двигаем платформу при движении мыши
+		self.last_pos = pos
+
+		msg.post("#platform_interface", "change_position", {pos = pos})
 	end
 end
 

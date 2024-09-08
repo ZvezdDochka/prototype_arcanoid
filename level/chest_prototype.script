@@ -15,7 +15,6 @@ function on_message(self, message_id, message, sender)
 			local speed = math.random(3, 8)
 			factory.create("#factory", loot_pos[i], nil, {speed = speed}, 1)
 		end
-		print(loot_count)
 		self.spawn_ready = false
 		timer.delay(1, false, function()
 			self.spawn_ready = true

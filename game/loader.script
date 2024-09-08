@@ -20,4 +20,10 @@ function on_message(self, message_id, message, sender)
 		msg.post(sender, "init") -- инициализируем уровень
 		msg.post(sender, "enable") -- включаем все объекты, начинаем отрисовку спрайтов
 	end
+
+	if message_id == hash("game_over") then -- если игра ококнчена
+		local lv_name = message.level
+		msg.post("#level_"..lv_name, "final") -- финализируем все скрипты
+		msg.post("#level_"..lv_name, "unload") -- выгружаем уровень
+	end
 end

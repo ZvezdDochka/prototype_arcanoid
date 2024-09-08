@@ -1,6 +1,14 @@
 BALL_SPEED = 350
 PLATFORM_ADD_SPEED = 100
 
+local function ballOutOfBorder(self)
+	if go.exists() and not self.out then
+		msg.post("/platform#platform_interface", "change_progress", {count = -1})
+		self.out = true
+		go.delete()
+	end
+end
+
 function init(self)
 	msg.post("#collisionobject", "disable") -- на старте отключаем у шарика физику
 	self.speed = BALL_SPEED
@@ -18,7 +26,7 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("contact_point_response") then -- обрабатываем столкновение шарика с поверхностями 
 		if message.group == hash("out") then -- при столкновении с нижней границей поля
-			print("GAME OVER")
+			ballOutOfBorder(self)
 		elseif message.group == hash("platform") or message.group == hash("top") or message.group == hash("left") or message.group == hash("right") then
 			if message.other_id ~= self.prev_id then -- если до этого шарик касался другого объекта
 				local normal = message.normal -- берем нормаль к поверхности

@@ -1,0 +1,37 @@
+MAX_LIVES = 3
+
+local function changeProgress(self, count)
+	if self.lives > 0 then
+		self.lives = self.lives + count
+		gui.set_size(self.progress_node, vmath.vector3(self.size.x - self.step, self.size.y, self.size.z))
+		self.size = gui.get_size(self.progress_node)
+		
+		msg.post("/ball_generator#ball_generator", "generate_ball") -- спавним шарик на платформе
+	else
+		msg.post("game:/interface#main_menu", "show_main_menu") -- активируем меню
+		msg.post("game:/loader#loader", "game_over", {level = "classic"})
+		print("GAMEOVEEEEEER")
+	end
+end
+
+function init(self)
+	self.lives = MAX_LIVES
+	self.progress_node = gui.get_node("progress_bar")
+	self.frame_node = gui.get_node("progress_frame")
+	
+	self.size = gui.get_size(self.progress_node)
+	self.step = self.size.x/MAX_LIVES
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("change_progress") then
+		changeProgress(self, message.count)
+	end
+	
+	if message_id == hash("change_position") then
+		local new_pos = message.pos
+		
+		local pos = gui.get_position(self.frame_node)
+		gui.set_position(self.frame_node, vmath.vector3(new_pos.x, pos.y, pos.z))
+	end
+end
