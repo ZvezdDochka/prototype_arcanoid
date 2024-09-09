@@ -4,9 +4,9 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("start_level") then
-		self.number = message.level
-		msg.post("/brick_generator#brick_generator", "generate_bricks", {level = self.number})
-		msg.post("/chest_generator#chest_generator", "generate_chests", {level = self.number})
+		self.level = message.level
+		msg.post("/brick_generator#brick_generator", "generate_bricks", {level = self.level})
+		msg.post("/chest_generator#chest_generator", "generate_chests", {level = self.level})
 		msg.post("/ball_generator#ball_generator", "generate_ball") -- спавним шарик на платформе
 	end
 end

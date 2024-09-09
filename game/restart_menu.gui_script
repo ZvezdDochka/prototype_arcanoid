@@ -1,0 +1,73 @@
+function init(self)
+	self.btn_node = gui.get_node("btn")
+	self.btn_text_node = gui.get_node("btn_text")
+	self.menu_btn_node = gui.get_node("menu_btn")
+	self.menu_btn_text_node = gui.get_node("menu_btn_text")
+	self.menu_header_text_node = gui.get_node("menu_header_text")
+	
+	msg.post(".", "acquire_input_focus") -- получаем информацию ввода с устройств
+	msg.post("#", "disable")
+	self.active = false
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("show_menu") then
+		defos.set_cursor_visible(true)
+		msg.post("game:/loader#loader", "pause_game", {level_type = "classic"})
+		msg.post("#", "enable")
+		self.active = true
+		self.type = message.type
+		self.coins = message.coins
+		self.loot = message.loot
+		print(self.type)
+
+		if self.type == hash("game_over") then
+			gui.set_text(self.btn_text_node, "РЕСТАРТ")
+			gui.set_enabled(self.btn_node, true)
+			self.btn_active = true
+		elseif self.type == hash("win_level") then
+			gui.set_text(self.btn_text_node, "СЛЕДУЮЩИЙ")
+			gui.set_enabled(self.btn_node, true)
+			self.btn_active = true
+		elseif self.type == hash("win_game") then
+			gui.set_enabled(self.btn_node, false)
+			self.btn_active = false
+		elseif self.type == hash("pause_game") then
+			gui.set_text(self.btn_text_node, "ПРОДОЛЖИТЬ")
+			gui.set_enabled(self.btn_node, true)
+			self.btn_active = true
+		end
+	end
+
+	if message_id == hash("hide_menu") then
+		defos.set_cursor_visible(false)
+		msg.post("#", "disable")
+		self.active = false
+	end
+
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("touch") and action.pressed and self.active then
+		if (gui.pick_node(self.btn_node, action.x, action.y)) and self.btn_active then
+			if self.type == hash("game_over") then
+				msg.post("game:/loader#loader", "game_over", {level_type = "classic"})
+			elseif self.type == hash("win_level") then
+				msg.post("game:/loader#loader", "win_level", {level_type = "classic", coins = self.coins, loot = self.loot})
+			end
+
+			msg.post("game:/loader#loader", "continue_game", {level_type = "classic"})
+			msg.post("#", "hide_menu")
+			
+		elseif (gui.pick_node(self.menu_btn_node, action.x, action.y)) then
+			if self.type == hash("game_over") or self.type == hash("pause_game") then
+				msg.post("game:/loader#loader", "game_over", {level_type = "classic", menu = true})
+			elseif self.type == hash("win_level") or hash("win_game") then
+				msg.post("game:/loader#loader", "win_level", {level_type = "classic", coins = self.coins, loot = self.loot, menu = true})
+			end
+			
+			msg.post("game:/loader#loader", "continue_game", {level_type = "classic"})
+			msg.post("#", "hide_menu")
+		end
+	end
+end

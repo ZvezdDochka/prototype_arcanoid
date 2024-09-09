@@ -8,8 +8,7 @@ local function changeProgress(self, count)
 		
 		msg.post("/ball_generator#ball_generator", "generate_ball") -- спавним шарик на платформе
 	else
-		msg.post("game:/interface#main_menu", "show_main_menu") -- активируем меню
-		msg.post("game:/loader#loader", "game_over", {level = "classic"})
+		msg.post("game:/interface#restart_menu", "show_menu", {type = hash("game_over")})
 	end
 end
 

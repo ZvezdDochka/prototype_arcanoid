@@ -1,11 +1,22 @@
 SCREEN_HIGH = sys.get_config_int("display.height") -- получаем высоту/ширину из настроек игры
 SCREEN_WIDTH = sys.get_config_int("display.width")
-
-local MAX_LEVEL = 2
+MAX_LEVEL = 2
 
 local coins = 0
 local loot = 0
 local level = 1
+
+local function pauseGame(self, lv_name)
+	msg.post("#level_"..lv_name, "set_time_step", {factor = 0, mode = 1})
+	msg.post("level:/level_interface#level_interface", "release_input_focus")
+	msg.post("level:/platform#platform", "release_input_focus")
+end
+
+local function continueGame(self, lv_name)
+	msg.post("#level_"..lv_name, "set_time_step", {factor = 1, mode = 1})
+	msg.post("level:/level_interface#level_interface", "acquire_input_focus")
+	msg.post("level:/platform#platform", "acquire_input_focus")
+end
 
 function init(self)
 	defos.set_fullscreen(true)
@@ -19,34 +30,56 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("load_level") then
 		local lv_name = message.level_type
 		msg.post("#level_"..lv_name, "load") -- загружаем уровень
-		--defos.set_cursor_visible(false)
 	end
 
 	if message_id == hash("proxy_loaded") then -- узнаем что новый уровень загружен
 		msg.post(sender, "init") -- инициализируем уровень
 		msg.post(sender, "enable") -- включаем все объекты, начинаем отрисовку спрайтов
 		msg.post("level:/level#level", "start_level", {level = level})
-		msg.post("level:/level_interface#level_interface", "start_level", {coins = coins, loot = loot})
+		msg.post("level:/level_interface#level_interface", "start_level", {coins = coins, loot = loot, level = level})
 	end
 
 	if message_id == hash("game_over") then -- если игра ококнчена
 		local lv_name = message.level_type
+		print(lv_name)
+		self.exit_to_menu = message.menu
+		
 		msg.post("#level_"..lv_name, "final") -- финализируем все скрипты
 		msg.post("#level_"..lv_name, "unload") -- выгружаем уровень
 	end
 
 	if message_id == hash("win_level") then
 		local lv_name = message.level_type
-		coins = message.coins
-		loot = message.loot
+		self.exit_to_menu = message.menu
+		
+		if message.coins then coins = message.coins end
+		if message.loot then loot = message.loot end
+
+		if level < MAX_LEVEL then
+			level = level + 1
+		else
+			level = 1
+		end
+		
 		msg.post("#level_"..lv_name, "final") -- финализируем все скрипты
 		msg.post("#level_"..lv_name, "unload") -- выгружаем уровень
 	end
 
 	if message_id == hash("proxy_unloaded") then
-		if level < MAX_LEVEL then
-			level = level + 1
+		if self.exit_to_menu then
+			msg.post("/interface#main_menu", "show_main_menu")
+		else
 			msg.post("#", "load_level", {level_type = "classic"})
 		end
+	end
+
+	if message_id == hash("pause_game") then
+		local lv_name = message.level_type
+		pauseGame(self, lv_name)
+	end
+
+	if message_id == hash("continue_game") then
+		local lv_name = message.level_type
+		continueGame(self, lv_name)
 	end
 end
