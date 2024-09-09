@@ -31,5 +31,5 @@ gravity_y = -1000.0
 scale = 0.02
 max_collisions = 256
 max_contacts = 512
-debug = 1
+debug = 0
 

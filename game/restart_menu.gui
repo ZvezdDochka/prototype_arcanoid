@@ -11,7 +11,7 @@ background_color {
 }
 nodes {
   position {
-    x: 944.0
+    x: 946.0
     y: 493.0
     z: 0.0
     w: 1.0
@@ -29,7 +29,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 200.0
+    x: 400.0
     y: 100.0
     z: 0.0
     w: 1.0
@@ -61,7 +61,7 @@ nodes {
   clipping_inverted: false
   alpha: 1.0
   template_node_child: false
-  size_mode: SIZE_MODE_AUTO
+  size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
   visible: true
@@ -154,7 +154,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 200.0
+    x: 400.0
     y: 100.0
     z: 0.0
     w: 1.0
@@ -186,7 +186,7 @@ nodes {
   clipping_inverted: false
   alpha: 1.0
   template_node_child: false
-  size_mode: SIZE_MODE_AUTO
+  size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
   visible: true
@@ -292,7 +292,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "\321\202\320\265\320\272\321\201\321\202"
+  text: ""
   font: "text"
   id: "menu_header_text"
   xanchor: XANCHOR_NONE

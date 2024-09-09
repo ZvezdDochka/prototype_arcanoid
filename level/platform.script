@@ -16,6 +16,8 @@ end
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	--msg.post("#hands_collision", "disable")
+	local pos = go.get_position()
+	msg.post("#platform_interface", "change_position", {pos = pos})
 end
 
 function fixed_update(self, dt)

@@ -1,7 +1,7 @@
 local function spawn_ball(self, x_pos, y_pos)
 	local pos = go.get_position("/platform")
 	local high = go.get("/platform#sprite", "size.y")
-	self.ball = factory.create("#factory", vmath.vector3(pos.x, pos.y + high, 0.2), nil, {}, 1) -- создаем шарик из прототипа
+	self.ball = factory.create("#factory", vmath.vector3(pos.x, pos.y + high/2 + 15, 0.2), nil, {}, 1) -- создаем шарик из прототипа
 	msg.post("/platform", "ball_is_ready", {ball_id = self.ball}) -- говорим платформе что шарик готов и отправляем id
 end
 
@@ -11,8 +11,6 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("generate_ball") then
-		local x_pos = message.x_pos
-		local y_pos = message.y_pos
 		spawn_ball(self) -- создаем шарик
 	end
 end

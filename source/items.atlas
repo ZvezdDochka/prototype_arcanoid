@@ -3,7 +3,15 @@ images {
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/assets/platform.png"
+  image: "/assets/hero.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/coins_1.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/ui_bckgr_settings.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0

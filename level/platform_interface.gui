@@ -8,7 +8,7 @@ background_color {
 nodes {
   position {
     x: 0.0
-    y: 227.0
+    y: 382.0
     z: 0.0
     w: 1.0
   }
@@ -19,8 +19,8 @@ nodes {
     w: 1.0
   }
   scale {
-    x: 1.0
-    y: 1.0
+    x: 0.779236
+    y: 0.723793
     z: 1.0
     w: 1.0
   }
@@ -60,7 +60,7 @@ nodes {
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
   material: ""
 }
 nodes {
@@ -78,7 +78,7 @@ nodes {
   }
   scale {
     x: 1.0
-    y: 1.0
+    y: 0.51002
     z: 1.0
     w: 1.0
   }
@@ -89,9 +89,9 @@ nodes {
     w: 1.0
   }
   color {
-    x: 0.4
-    y: 0.502
-    z: 0.902
+    x: 0.25
+    y: 1.0
+    z: 0.962
     w: 1.0
   }
   type: TYPE_BOX

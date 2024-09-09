@@ -1,5 +1,13 @@
 images {
-  image: "/assets/brick_1.png"
+  image: "/assets/web.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/chest_open.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/fireplace.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0

@@ -30,7 +30,7 @@ function on_message(self, message_id, message, sender)
 		gui.set_text(self.coins_count_node, coins)
 
 		bricks = bricks + 1
-		if bricks >= 2 then --bricks_on_level
+		if bricks >= bricks_on_level then
 			if level == MAX_LEVEL then
 				msg.post("game:/interface#restart_menu", "show_menu", {type = hash("win_game"), coins = coins, loot = loot})
 			else

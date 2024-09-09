@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "default_animation: \"brick_1\"\n"
+  data: "default_animation: \"web\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   "textures {\n"
@@ -35,6 +35,11 @@ embedded_components {
     z: 0.0
     w: 1.0
   }
+  scale {
+    x: 0.590062
+    y: 0.552716
+    z: 1.0
+  }
 }
 embedded_components {
   id: "collisionobject"
@@ -48,7 +53,7 @@ embedded_components {
   "mask: \"ball\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
-  "    shape_type: TYPE_BOX\n"
+  "    shape_type: TYPE_SPHERE\n"
   "    position {\n"
   "      x: 0.0\n"
   "      y: 0.0\n"
@@ -61,12 +66,10 @@ embedded_components {
   "      w: 1.0\n"
   "    }\n"
   "    index: 0\n"
-  "    count: 3\n"
+  "    count: 1\n"
   "    id: \"\"\n"
   "  }\n"
-  "  data: 32.0\n"
-  "  data: 16.0\n"
-  "  data: 10.0\n"
+  "  data: 33.850044\n"
   "}\n"
   "linear_damping: 0.0\n"
   "angular_damping: 0.0\n"
