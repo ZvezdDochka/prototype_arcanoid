@@ -1,13 +1,17 @@
-# Welcome to Defold
+# "Арканоид" для индивидуального задания хакатона "Синеус".
 
-This project was created from the "empty" project template.
+Win-билд:
+https://github.com/ZvezdDochka/prototype_arcanoid/tree/main/x86_64-win32
 
-The settings in ["game.project"](defold://open?path=/game.project) are all the default. A bootstrap empty ["main.collection"](defold://open?path=/main/main.collection) is included.
+Сам проект планирую дорабатывать, но в билде состояние проекта на 09.09.24.
 
-Check out [the documentation pages](https://defold.com/learn) for examples, tutorials, manuals and API docs.
-
-If you run into trouble, help is available in [our forum](https://forum.defold.com).
-
-Happy Defolding!
-
----
+09.09.24 v 0.1 Реализован прототип арканоида (управление мышкой): 
+- шарик отскакивает от платформы под разным углом (ближе к краю больше скорость по х)
+- быстрое движение платформы чуть ускоряет шарик
+- на уровне два вида блоков: разрушаемые (без отскока) и неразрушаемые (с отскоком)
+- угол отскока от неразрушаемых блоков слегка меняется (чтобы шарик не застревал между двумя блоками)
+- из неразрушаемых блоков выпадает лут (собираем платформой)
+- UI info: в платформе закреплен прогрес-бар оставшихся попыток (маны), под игровым полем расположен интвентарь с кол-вом лута, счет
+- UI windows: основное меню (старт, выход), окна паузы, победы, поражения (с выходом в меню, рестартом или переходом на следующий уровнень)
+- графика заглушечная (с намеком на славянский сеттинг)
+- коментарий: в билд не вошли надписи о победе и поражении
